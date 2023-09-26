@@ -3,13 +3,51 @@ package com.example.appmetodos;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     //Una Clase (class) puede tener n cantidad de funciones o metodos
+
+    TextView tv_imc;
+    EditText name, weight, height;
+    Button calculate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        tv_imc= findViewById(R.id.tvIMC);
+        name=findViewById(R.id.etName);
+        weight=findViewById(R.id.etWeight);
+        height=findViewById(R.id.etHeight);
+        calculate=findViewById(R.id.btnCalculate);
+
+        calculate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Obtengo el texto de los campos de la app
+                String nameText= name.getText().toString();
+                String weightText= weight.getText().toString();
+                String heightTexto= height.getText().toString();
+                //Validar que los textos no esten vacios
+                //String tiene un metodo para validar si es vacio
+                if (nameText.isEmpty() || weightText.isEmpty() || heightTexto.isEmpty()){
+                    Toast.makeText(getBaseContext(),"Todos los campos deben llenarse",
+                            Toast.LENGTH_LONG).show();
+                }else{
+                    //Convertir texto a double
+                    double peso= Double.parseDouble(weightText);
+                    double altura= Double.parseDouble(heightTexto);
+                    double imcResult= calcularIMC(peso,altura);
+                    message(imcResult,nameText);
+                }
+            }
+        });
+
+
     }
 
     //Declaración de metodos
@@ -64,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     protected void message(double imc, String nombre){
         System.out.println("El usuario: "+nombre+ ", tiene un IMC de "+imc);
         // "El usuario: Luis, tiene un IMC de 40"
-
+        tv_imc.setText("El usuario: "+nombre+ ", tiene un IMC de "+imc);
         //Dentro de String hay una función de concatenar o combinar (+)
         // 55+""="55",  25.5 +"Hola"= "25.5Hola"
     }
